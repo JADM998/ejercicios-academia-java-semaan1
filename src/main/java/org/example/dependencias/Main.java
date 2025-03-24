@@ -1,7 +1,6 @@
 package org.example.dependencias;
 
 import org.example.dependencias.pokemon.combat.PokemonCombat;
-import org.example.dependencias.pokemon.combat.PokemonCombatStatus;
 import org.example.dependencias.pokemon.move.*;
 import org.example.dependencias.pokemon.pokemons.*;
 
@@ -30,10 +29,11 @@ public class Main {
         PokemonMove[] pikachuMoves = {new MoveImpactrueno(), new MoveTacleada()};
         PokemonStats pikachuStats = new PokemonStats(47, 27, 35, 41);
 
-        Pokemon bulbasaur = new PokemonBulbasuar(10, bulbasuarMoves, bulbasaurStats);
-        Pokemon squirtle = new PokemonSquirtle(10, squirtleMoves, squirtleStats);
-        Pokemon charmander = new PokemonCharmander(10, charmanderMoves, charmanderStats);
-        Pokemon pikachu = new PokemonPikachu(10, pikachuMoves, pikachuStats);
+        PokemonInyector inyector = new PokemonInyector();
+        Pokemon bulbasaur = inyector.inyectPokemon(Pokemons.BULBASAUR, randomGenerator, bulbasaurStats, bulbasuarMoves);
+        Pokemon squirtle = inyector.inyectPokemon(Pokemons.SQUIRTLE, randomGenerator, squirtleStats, squirtleMoves);
+        Pokemon charmander = inyector.inyectPokemon(Pokemons.CAHRMANDER, randomGenerator, charmanderStats, charmanderMoves);
+        Pokemon pikachu = inyector.inyectPokemon(Pokemons.PIKACHU, randomGenerator, pikachuStats, pikachuMoves);
 
         List<Pokemon> pokemons = new LinkedList<>();
         pokemons.add(bulbasaur);
@@ -47,41 +47,16 @@ public class Main {
         Pokemon pokemon4 = getUniquePokemon(pokemons);
 
         PokemonCombat[] combats = {
-                new PokemonCombat(pokemon1, pokemon2, new DefaultMove()),
-                new PokemonCombat(pokemon3, pokemon4, new DefaultMove())
+                new PokemonCombat(pokemon1, pokemon2, new DefaultMove(), randomGenerator),
+                new PokemonCombat(pokemon3, pokemon4, new DefaultMove(), randomGenerator)
         };
 
-        for (PokemonCombat combat : combats) {
+        for(PokemonCombat combat: combats){
+            combat.start();
 
-            Pokemon pokemon = combat.getPokemon();
-            Pokemon adversary = combat.getAdversary();
-            System.out.println(
-                    "El combate ha comenzado entre " + pokemon.getName() + " y " + adversary.getName());
-            PokemonCombatStatus status = combat.start();
-            if (status == PokemonCombatStatus.FINALIZED) {
-                System.out.println(combat.getWinner());
+            while (!combat.hasFinished()) {
+                combat.simulateNextTurn();
             }
-
-            while (!combat.hasWinner()) {
-                int movePosition = pokemon.chooseValidMove();
-
-                if (movePosition == -1) {
-                    status = combat.attack(0);
-                }else{
-                    status = combat.attack(movePosition);
-                }
-
-                if (status == PokemonCombatStatus.FINALIZED) {
-                    System.out.println(combat.getWinner());
-                    break;
-                }
-
-                status = combat.adversaryTurn();
-                if (status == PokemonCombatStatus.FINALIZED) {
-                    System.out.println(combat.getWinner());
-                }
-            }
-
         }
     }
 

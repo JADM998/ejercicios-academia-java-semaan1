@@ -44,4 +44,9 @@ public class PokemonMove {
 
         currentPoints--;
     }
+
+    @Override
+    public String toString(){
+        return this.name;
+    }
 }

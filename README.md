@@ -24,9 +24,9 @@ El ejercicio se encuentra en `org.example.dependencias.pokemon` y se puede ejecu
 3. `PokemonCombat`: Clase que sirve como un servicio para combatir dos pokemon.
 4. `PokemonStats`: Clase auxiliar que permite definir finamente las estadísticas de un pokemon.
 
-En este ejercició se uso inyección de dependencias usando el método de construcción, ya que en `Main.java` se definieron los objetos necesarios para poder realizar los combates.
+En este ejercició se uso inyección de dependencias usando el método de construcción y el método del Inyector, ya que en `Main.java` se definieron los objetos necesarios para poder inyectar a los Pokemon y, con esas inyecciones se definieron los combates mediante el Consturctor..
 
-1. Se inició instanciando un arreglo de 4 movimientos pokemon, donde solo se llenaron 2 espacios para todos los objetos. También se definió las estadísticas de los pokemon, se uso inyección de dependencias al pasar estos objetos en los parámetros de construcción y así lograr desacolpar la creación de los objetos en las clases específicas.
-2. Con `PokemonStats` y `PokemonMove` definidos se crearon instancias de `Pokemon` inyectando los anteriors objetos, logrando así la inyección de dependencias.
-3. Se definieron 4 `Pokemon`, se necesita 2 para librar un combate por lo que se seleccionaron al azar y se inyectaron en `PokemonCombat`.
+1. Se inició instanciando arreglos de 2 movimientos por pokemon y definiendo las estadísticas individuales de cada uno.
+2. Con `PokemonStats` y `PokemonMove` definidos se crearon instancias de `Pokemon` inyectando los anteriors objetos mediante `PokemonInyector`, logrando así la inyección de dependencias.
+3. Se definieron 4 `Pokemon`, se necesita 2 para librar un combate por lo que se seleccionaron al azar y se inyectaron en `PokemonCombat` mediante la inyección por constructor.
 4. Todo lo demás es lógica para el control del combate.
